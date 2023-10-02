@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  checkmk:
+    container_name: checkmk
+    image: checkmk/check-mk-raw:2.2.0-latest
+    tmpfs:
+      - /opt/omd/sites/hpc/tmp:uid=1000,gid=1000
+    ulimits:
+      nofile: 1024
+    volumes:
+      - ./monitoring:/omd/sites
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hpc-central.rule=Host(`hpc-central.ebi.ac.uk`) || (Host(`www.hpc-central.ebi.ac.uk`))"
+      - "traefik.http.routers.hpc-central.entrypoints=websecure"
+      - "traefik.http.routers.hpc-central.tls=true"
+      - "traefik.frontend.rule=Host:localhost"
+      - "traefik.http.services.hpc-central.loadbalancer.server.port=5000"
+
+    networks:
+      - web 
+
+networks:
+    web: 
+      external: true
