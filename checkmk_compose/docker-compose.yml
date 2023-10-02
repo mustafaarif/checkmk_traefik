@@ -18,7 +18,7 @@ services:
       - ./.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.hpc-central.rule=Host(`hpc-central.ebi.ac.uk`) || (Host(`www.hpc-central.ebi.ac.uk`))"
+      - "traefik.http.routers.hpc-central.rule=Host(`hpc-central.mydomain`) || (Host(`www.hpc-central.mydomain`))"
       - "traefik.http.routers.hpc-central.entrypoints=websecure"
       - "traefik.http.routers.hpc-central.tls=true"
       - "traefik.frontend.rule=Host:localhost"
